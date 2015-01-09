@@ -1,3 +1,5 @@
+//by toto
+
 #include <stdio.h>
 #include "SDL.h"
 #include "SDL_image.h"
@@ -12,7 +14,7 @@ static void main_loop(void);
 //Frees all resources.
 static void clean_up(void);
 
-static Game_t pacmanGame;
+static Game_t pacmanGame; 
 static int gameRunning = 1;
 
 int main(int argc, char** argv) {
