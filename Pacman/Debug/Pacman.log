@@ -1,0 +1,20 @@
+﻿Построение начато 10.01.2015 2:48:04.
+     1>Проект "C:\Project\Pacman\Pacman\Pacman.vcxproj" в узле 2 (целевые объекты build).
+     1>InitializeBuildStatus:
+         Создание "Debug\Pacman.unsuccessfulbuild", так как было задано "AlwaysCreate".
+       ClCompile:
+         Для всех выходных данных обновления не требуется.
+       ManifestResourceCompile:
+         Для всех выходных данных обновления не требуется.
+       Link:
+         Для всех выходных данных обновления не требуется.
+       Manifest:
+         Для всех выходных данных обновления не требуется.
+       FinalizeBuildStatus:
+         Файл "Debug\Pacman.unsuccessfulbuild" удаляется.
+         Обращение к "Debug\Pacman.lastbuildstate".
+     1>Построение проекта "C:\Project\Pacman\Pacman\Pacman.vcxproj" завершено (целевые объекты build).
+
+Построение успешно завершено.
+
+Затраченное время: 00:00:00.07
