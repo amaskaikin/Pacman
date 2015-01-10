@@ -86,20 +86,26 @@
   <ItemGroup>
     <ClCompile Include="app_window.c" />
     <ClCompile Include="border.c" />
+    <ClCompile Include="characters.c" />
     <ClCompile Include="direction.c" />
     <ClCompile Include="game.c" />
     <ClCompile Include="img_load.c" />
+    <ClCompile Include="in.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="draw.c" />
+    <ClCompile Include="physcs.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app_window.h" />
     <ClInclude Include="border.h" />
+    <ClInclude Include="characters.h" />
     <ClInclude Include="direction.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="img_load.h" />
+    <ClInclude Include="in.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="draw.h" />
+    <ClInclude Include="physcs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

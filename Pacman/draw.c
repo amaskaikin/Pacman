@@ -12,6 +12,21 @@
 #define Y_OFFSET 3
 static int offset = 3 * 16;
 
+//draws an image at a board coordinate
+void draw_image_coord(SDL_Surface *surface, int x, int y);
+void draw_image_coord_offset(SDL_Surface *surface, int x, int y, int xOffset, int yOffset);
+
+void draw_image_coord(SDL_Surface *surface, int x, int y)
+{
+	draw_image_coord_offset(surface, x, y, 0, 0);
+}
+
+void draw_image_coord_offset(SDL_Surface *surface, int x, int y, int xOffset, int yOffset)
+{
+	int pixPerTile = 16;
+	set_surface(pixPerTile * x + xOffset, pixPerTile * y + yOffset, surface);
+}
+
 //
 //
 // Board rendering
@@ -30,3 +45,16 @@ void draw_border(Border_t *border)
 	}
 }
 
+//
+//
+// Pacman renderering
+//
+//
+
+void draw_pacman_static(Pacman_t *pacman)
+{
+	int xOffset = pacman->body.xOffset - 4;
+	int yOffset = offset + pacman->body.yOffset - 6;
+
+	draw_image_coord_offset(pacman_img(), pacman->body.x, pacman->body.y, xOffset, yOffset);
+}

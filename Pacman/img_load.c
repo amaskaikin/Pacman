@@ -25,18 +25,30 @@ SDL_Surface *corral_imgs[4];
 SDL_Surface *corralSide_imgs[4];
 SDL_Surface *corralGate;
 
+//
+//pacman sprites
+//
+SDL_Surface *pacman;
+SDL_Surface *aniPacman[4][3];
+SDL_Surface *deathPacman[11];
+SDL_Surface *pacmanLifeIcon;
+
 void load_border_imgs(void);
+void load_pacman_imgs(void);
 
 void set_border_imgs(void);
+void set_pacman_imgs(void);
 
 void load_imgs(void)
 {
 	load_border_imgs();
+	load_pacman_imgs();
 }
 
 void set_imgs(void)
 {
 	set_border_imgs();
+	set_pacman_imgs();
 }
 
 void load_diags(SDL_Surface *imgs[4], const char *file)
@@ -94,6 +106,24 @@ void set_border_imgs(void)
 	}
 
 	SDL_FreeSurface(corralGate);
+}
+
+void load_pacman_imgs(void)
+{
+	int i;
+	char dirStr[256];
+	pacman = load_img("images\\entities\\pacman\\pacman.png");
+
+	pacmanLifeIcon = load_img("images\\entities\\pacman\\pac_life_icon.png");
+
+}
+
+void set_pacman_imgs(void)
+{
+	int i;
+	SDL_FreeSurface(pacman);
+
+	SDL_FreeSurface(pacmanLifeIcon);
 }
 
 SDL_Surface *load_img(const char *filename)
@@ -170,4 +200,14 @@ SDL_Surface* corral_side_img(Direction_t direction)
 SDL_Surface* corral_gate_img(void)
 {
 	return corralGate;
+}
+
+SDL_Surface* pacman_img(void)
+{
+	return pacman;
+}
+
+SDL_Surface* pacman_life_img(void)
+{
+	return pacmanLifeIcon;
 }
