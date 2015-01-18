@@ -33,22 +33,33 @@ SDL_Surface *aniPacman[4][3];
 SDL_Surface *deathPacman[11];
 SDL_Surface *pacmanLifeIcon;
 
+//
+//feauters sprites
+//
+
+SDL_Surface *smallPill;
+SDL_Surface *largePill;
+
 void load_border_imgs(void);
 void load_pacman_imgs(void);
+void load_feature_imgs(void);
 
 void set_border_imgs(void);
 void set_pacman_imgs(void);
+void set_feature_imgs(void);
 
 void load_imgs(void)
 {
 	load_border_imgs();
 	load_pacman_imgs();
+	load_feature_imgs();
 }
 
 void set_imgs(void)
 {
 	set_border_imgs();
 	set_pacman_imgs();
+	set_feature_imgs();
 }
 
 void load_diags(SDL_Surface *imgs[4], const char *file)
@@ -113,17 +124,50 @@ void load_pacman_imgs(void)
 	int i;
 	char dirStr[256];
 	pacman = load_img("images\\entities\\pacman\\pacman.png");
-
 	pacmanLifeIcon = load_img("images\\entities\\pacman\\pac_life_icon.png");
+	aniPacman[0][0] = load_img("images\\entities\\pacman\\l0.png");
+	aniPacman[0][1] = load_img("images\\entities\\pacman\\l1.png");
+	aniPacman[0][2] = aniPacman[0][0];
 
+	aniPacman[1][0] = load_img("images\\entities\\pacman\\u0.png");
+	aniPacman[1][1] = load_img("images\\entities\\pacman\\u1.png");
+	aniPacman[1][2] = aniPacman[1][0];
+
+	aniPacman[2][0] = load_img("images\\entities\\pacman\\r0.png");
+	aniPacman[2][1] = load_img("images\\entities\\pacman\\r1.png");
+	aniPacman[2][2] = aniPacman[2][0];
+
+	aniPacman[3][0] = load_img("images\\entities\\pacman\\d0.png");
+	aniPacman[3][1] = load_img("images\\entities\\pacman\\d1.png");
+	aniPacman[3][2] = aniPacman[3][0];
 }
 
 void set_pacman_imgs(void)
 {
 	int i;
 	SDL_FreeSurface(pacman);
-
 	SDL_FreeSurface(pacmanLifeIcon);
+
+	SDL_FreeSurface(aniPacman[0][0]);
+	SDL_FreeSurface(aniPacman[0][1]);
+	SDL_FreeSurface(aniPacman[1][0]);
+	SDL_FreeSurface(aniPacman[1][1]);
+	SDL_FreeSurface(aniPacman[2][0]);
+	SDL_FreeSurface(aniPacman[2][1]);
+	SDL_FreeSurface(aniPacman[3][0]);
+	SDL_FreeSurface(aniPacman[3][1]);
+}
+
+void load_feature_imgs(void)
+{
+	smallPill = load_img("images\\smallpill.png");
+	largePill = load_img("images\\largepill.png");
+}
+
+void set_feature_imgs(void)
+{
+	SDL_FreeSurface(smallPill);
+	SDL_FreeSurface(largePill);
 }
 
 SDL_Surface *load_img(const char *filename)
@@ -207,7 +251,39 @@ SDL_Surface* pacman_img(void)
 	return pacman;
 }
 
+SDL_Surface *pacman_ani_img(Direction_t dir, int frame)
+{
+	if (frame < 0 || frame > 4)
+	{
+		printf("invalid pacman frame: %d\n", frame);
+		exit(1);
+	}
+
+	if (frame == 0) return pacman;
+
+	switch(dir)
+	{
+		case Left:  return aniPacman[0][frame - 1];
+		case Up:    return aniPacman[1][frame - 1];
+		case Right: return aniPacman[2][frame - 1];
+		case Down:  return aniPacman[3][frame - 1];
+	}
+
+	printf("incorrect enum value\n");
+	exit(1);
+}
+
 SDL_Surface* pacman_life_img(void)
 {
 	return pacmanLifeIcon;
+}
+
+SDL_Surface* small_pill_img(void)
+{
+	return smallPill;
+}
+
+SDL_Surface* large_pill_img(void)
+{
+	return largePill;
 }

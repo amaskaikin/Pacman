@@ -19,9 +19,10 @@ int isteleport_sq(int x, int y)
 	else return 0;
 }
 
-void load_border(Border_t *border, const char* file)
+void load_border(Border_t *border, CollectPills_t *collectPills, const char* file)
 {
 	FILE *f = fopen(file, "r");
+	int count_pills = 0;
 	int walkable = 0;
 	char c = 'a';
 	int x = 0;
@@ -83,11 +84,21 @@ void load_border(Border_t *border, const char* file)
 			case 'w': img = corral_gate_img();                 break;
 
 			case '.': /* pill */
-				
+				collectPills->Pills[count_pills].img = small_pill_img();
+				collectPills->Pills[count_pills].x = x;
+				collectPills->Pills[count_pills].y = y;
+				collectPills->Pills[count_pills].type = Small;
+				count_pills++;
+
 				walkable = 1;
 				break;
 			case '*': /*Large pill */
-				
+				collectPills->Pills[count_pills].img = large_pill_img();
+				collectPills->Pills[count_pills].x = x;
+				collectPills->Pills[count_pills].y = y;				
+				collectPills->Pills[count_pills].type = Large;
+				count_pills++;
+
 				walkable = 1;
 				break;
 			case ',': // empty, walkable square

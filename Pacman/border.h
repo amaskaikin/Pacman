@@ -2,6 +2,7 @@
 
 #include "SDL.h"
 #include "SDL_image.h"
+#include "features.h"
 
 #define BORDER_LENGTH 28
 #define BORDER_HEIGHT 31
@@ -37,4 +38,4 @@ typedef struct
 int isvalid_sq(Border_t *border, int x, int y);
 int isteleport_sq(int x, int y); //Return 1 if the square is teleport
 
-void load_border(Border_t *border, const char* file);
+void load_border(Border_t *border, CollectPills_t *collectPills, const char* file);

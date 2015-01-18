@@ -84,10 +84,13 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="anim.c" />
     <ClCompile Include="app_window.c" />
     <ClCompile Include="border.c" />
     <ClCompile Include="characters.c" />
     <ClCompile Include="direction.c" />
+    <ClCompile Include="features.c" />
+    <ClCompile Include="frames.c" />
     <ClCompile Include="game.c" />
     <ClCompile Include="img_load.c" />
     <ClCompile Include="in.c" />
@@ -96,10 +99,13 @@
     <ClCompile Include="physcs.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="anim.h" />
     <ClInclude Include="app_window.h" />
     <ClInclude Include="border.h" />
     <ClInclude Include="characters.h" />
     <ClInclude Include="direction.h" />
+    <ClInclude Include="features.h" />
+    <ClInclude Include="frames.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="img_load.h" />
     <ClInclude Include="in.h" />

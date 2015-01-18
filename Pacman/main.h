@@ -5,3 +5,10 @@
 #define SCREEN_WIDTH 448
 #define SCREEN_HEIGHT 576
 
+//Defines the main states the program can be in.
+typedef enum
+{
+	Start,
+	Game
+} ProgramState_t;
+

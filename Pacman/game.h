@@ -2,13 +2,19 @@
 
 #include "border.h"
 #include "characters.h"
+#include "frames.h"
+#include "features.h"
 
 typedef struct
 {
 	Border_t border;
 	Pacman_t pacman;
+	CollectPills_t collectPills;
 	int level;
 } Game_t;
+
+//Ticks(game 1 tick - 1/60th of a second)
+void g_tick(Game_t *game);
 
 //Renders the game
 void g_render(Game_t *game);

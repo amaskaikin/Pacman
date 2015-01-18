@@ -1,18 +1,38 @@
-﻿Построение начато 11.01.2015 2:49:24.
+﻿Построение начато 1/18/2015 3:26:06 AM.
      1>Проект "C:\Project\Pacman\Pacman\Pacman.vcxproj" в узле 2 (целевые объекты build).
      1>InitializeBuildStatus:
-         Создание "Debug\Pacman.unsuccessfulbuild", так как было задано "AlwaysCreate".
+         Обращение к "Debug\Pacman.unsuccessfulbuild".
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt main.c
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt border.c characters.c draw.c game.c img_load.c main.c
          main.c
+         img_load.c
+     1>c:\project\pacman\pacman\img_load.c(73): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371): см. объявление "sprintf"
+     1>c:\project\pacman\pacman\img_load.c(86): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371): см. объявление "sprintf"
+     1>c:\project\pacman\pacman\img_load.c(125): warning C4101: dirStr: неиспользованная локальная переменная
+     1>c:\project\pacman\pacman\img_load.c(124): warning C4101: i: неиспользованная локальная переменная
+     1>c:\project\pacman\pacman\img_load.c(147): warning C4101: i: неиспользованная локальная переменная
+         game.c
+     1>c:\project\pacman\pacman\game.c(12): warning C4101: i: неиспользованная локальная переменная
+     1>c:\project\pacman\pacman\game.c(121): warning C4013: resolve_telesquare: нет определения; предполагается "extern" с возвратом типа "int"
+         draw.c
+         characters.c
+         border.c
+     1>c:\project\pacman\pacman\border.c(24): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(234): см. объявление "fopen"
+         Создание кода...
        ManifestResourceCompile:
          Для всех выходных данных обновления не требуется.
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Project\Pacman\Debug\Pacman.exe" /INCREMENTAL /NOLOGO SDL.lib SDLmain.lib SDL_image.lib sdlgfx.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\Pacman.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Project\Pacman\Debug\Pacman.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Project\Pacman\Debug\Pacman.lib" /MACHINE:X86 Debug\Pacman.exe.embed.manifest.res
+         Debug\anim.obj
          Debug\app_window.obj
          Debug\border.obj
          Debug\characters.obj
          Debug\direction.obj
+         Debug\features.obj
+         Debug\frames.obj
          Debug\game.obj
          Debug\img_load.obj
          Debug\in.obj
@@ -32,4 +52,4 @@
 
 Построение успешно завершено.
 
-Затраченное время: 00:00:00.56
+Затраченное время: 00:00:01.04

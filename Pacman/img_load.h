@@ -4,6 +4,7 @@
 #include "SDL_image.h"
 #include "direction.h"
 #include "characters.h"
+#include "features.h"
 
 void load_imgs(void);
 void set_imgs(void);
@@ -23,3 +24,8 @@ SDL_Surface* corral_gate_img(void);
 
 SDL_Surface* pacman_img(void);
 SDL_Surface* pacman_life_img(void);
+SDL_Surface* pacman_ani_img(Direction_t dir, int frame);
+SDL_Surface* pacman_death_img(int i);
+
+SDL_Surface* small_pill_img(void);
+SDL_Surface* large_pill_img(void);
