@@ -29,3 +29,5 @@ SDL_Surface* pacman_death_img(int i);
 
 SDL_Surface* small_pill_img(void);
 SDL_Surface* large_pill_img(void);
+
+SDL_Surface* get_fruit_img(Fruit_t fruit);

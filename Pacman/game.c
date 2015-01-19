@@ -7,12 +7,18 @@
 #include "characters.h"
 #include "anim.h"
 
+static void process_player(Game_t *game);
+static void process_pills(Game_t *game);
+
+static int resolve_telesquare(Body_t *body);  
+
 void g_tick(Game_t *game)
 {
 	int i, lives;
 	unsigned dt = ticks_game();
 	//printf("dt: %d\n", dt);
 	process_player(game);
+	process_pills(game);
 
 	lives = game->pacman.lives;
 
@@ -27,6 +33,7 @@ void g_render(Game_t *game)
 	//draw_pacman_static(&game->pacman);	
 
 	draw_pacman_lives(game->pacman.lives);
+	draw_fruit_indicators(game->level);
 	draw_pacman(&game->pacman);
 	
 }
@@ -38,7 +45,7 @@ void init_game(Game_t *game)
 	game->level = 1;
 }
 
-void process_player(Game_t *game)
+static void process_player(Game_t *game)
 {
 	Direction_t newDir, oldlastDirect;
 	int newCurX, newCurY, newNextX, newNextY, canMoveCur, canMoveNext;
@@ -120,6 +127,36 @@ void process_player(Game_t *game)
 
 	resolve_telesquare(&pacman->body);
 }
+
+static void process_pills(Game_t *game)
+{
+	CollectPills_t *collect;
+	int i;
+
+	collect = &game->collectPills;
+
+	for (i = 0; i < collect->totalPills; i++)
+	{
+		Pill_t *p = &collect->Pills[i];
+
+		//skip if we've eaten this one already
+		if (p->exist) continue;
+
+		if (faces_obj(&game->pacman.body, p->x, p->y))
+		{
+			collect->existPills--;
+
+			p->exist = 1;
+
+			//eating a small pill makes pacman not move for 1 frame
+			//eating a large pill makes pacman not move for 3 frames
+			game->pacman.missedFrames = pill_nopframes(p);
+
+			return;
+		}
+	}
+}
+
 
 static int resolve_telesquare(Body_t *body)
 {

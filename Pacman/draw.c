@@ -124,6 +124,7 @@ void draw_small_pills(CollectPills_t *cp)
 		Pill_t p = cp->Pills[i];
 
 		if (p.type != Small) continue;
+		if (p.exist) continue;
 
 		set_surface(p.x * 16, offset + p.y * 16, p.img);
 	}
@@ -138,7 +139,47 @@ void draw_large_pills(CollectPills_t *cp)
 		Pill_t p = cp->Pills[i];
 
 		if (p.type != Large) continue;
+		if (p.exist) continue;
 
 		set_surface(p.x * 16, offset + p.y * 16, p.img);
 	}
+}
+
+//
+//
+// Fruit renderering
+//
+//
+
+void draw_fruit_indicators(int currentLevel)
+{
+	int i, x, y, index;
+	if (currentLevel < 1)
+	{
+		printf("invalid level number for drawing fruit: %d\naborting\n", currentLevel);
+		exit(1);
+	}
+
+	x = 26 * 16;
+	y = 34 * 16;
+
+	index = currentLevel > 7 ? 7 : currentLevel;
+
+	for (i = index; i > 0; i--)
+	{
+		Fruit_t fruit = fruit_nextlvl(currentLevel - (index - i));
+		SDL_Surface *image = get_fruit_img(fruit);
+
+		set_surface(x - i * 16 * 2, y, image);
+	}
+}
+
+//Draws the fruit in the middle of the level.
+void draw_fruit_game(int currentLevel)
+{
+	Fruit_t fruit = fruit_nextlvl(currentLevel);
+	SDL_Surface *image = get_fruit_img(fruit);
+
+	//TODO: maybe this offset isn't the same for all fruit. Investigate
+	draw_image_coord_offset(image, 13, 19, 0, 8);
 }

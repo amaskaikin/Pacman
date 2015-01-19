@@ -23,6 +23,8 @@ typedef enum
 	SameSquare  //Object has moved within square without moving over the center
 } MovRes_t;
 
+int faces_obj(Body_t *body, int otherX, int otherY);
+
 int move_pacman(Body_t *body, int canMoveCur, int canMoveNext);
 
 //Returns 1 if the body is in the center of a tile

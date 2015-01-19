@@ -26,3 +26,10 @@ void draw_pill_small(Pill_t *p);
 void draw_small_pills(CollectPills_t *cp);
 void draw_large_pills(CollectPills_t *cp);
 
+//
+// Fruit renderering
+//
+
+void draw_fruit_indicators(int currentLevel);
+void draw_fruit_game(int currentLevel);
+

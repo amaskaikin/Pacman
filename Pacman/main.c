@@ -33,7 +33,8 @@ int main(int argc, char** argv) {
 	init_window(SCREEN_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
 	load_imgs();
 	load_border(&pacmanGame.border, &pacmanGame.collectPills, "maps/encodedboard");
-	
+	init_fps(60);
+
 	main_loop();
 	clean_up();
 

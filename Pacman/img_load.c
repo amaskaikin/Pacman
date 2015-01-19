@@ -40,19 +40,34 @@ SDL_Surface *pacmanLifeIcon;
 SDL_Surface *smallPill;
 SDL_Surface *largePill;
 
+//
+//fruit images
+//
+SDL_Surface *cherryImage;
+SDL_Surface *strawberryImage;
+SDL_Surface *peachImage;
+SDL_Surface *appleImage;
+SDL_Surface *grapesImage;
+SDL_Surface *galaxianImage;
+SDL_Surface *bellImage;
+SDL_Surface *keyImage;
+
 void load_border_imgs(void);
 void load_pacman_imgs(void);
 void load_feature_imgs(void);
+void load_fruit_imgs(void);
 
 void set_border_imgs(void);
 void set_pacman_imgs(void);
 void set_feature_imgs(void);
+void set_fruit_imgs(void);
 
 void load_imgs(void)
 {
 	load_border_imgs();
 	load_pacman_imgs();
 	load_feature_imgs();
+	load_fruit_imgs();
 }
 
 void set_imgs(void)
@@ -60,6 +75,7 @@ void set_imgs(void)
 	set_border_imgs();
 	set_pacman_imgs();
 	set_feature_imgs();
+	set_fruit_imgs();
 }
 
 void load_diags(SDL_Surface *imgs[4], const char *file)
@@ -168,6 +184,30 @@ void set_feature_imgs(void)
 {
 	SDL_FreeSurface(smallPill);
 	SDL_FreeSurface(largePill);
+}
+
+void load_fruit_imgs(void)
+{
+	cherryImage     = load_img("images\\fruit\\cherry.png");
+	strawberryImage = load_img("images\\fruit\\strawberry.png");
+	peachImage      = load_img("images\\fruit\\peach.png");
+	appleImage      = load_img("images\\fruit\\apple.png");
+	grapesImage     = load_img("images\\fruit\\grapes.png");
+	galaxianImage   = load_img("images\\fruit\\galaxian.png");
+	bellImage       = load_img("images\\fruit\\bell.png");
+	keyImage        = load_img("images\\fruit\\key.png");
+}
+
+void set_fruit_imgs(void)
+{
+	SDL_FreeSurface(cherryImage);
+	SDL_FreeSurface(strawberryImage);
+	SDL_FreeSurface(peachImage);
+	SDL_FreeSurface(appleImage);
+	SDL_FreeSurface(grapesImage);
+	SDL_FreeSurface(galaxianImage);
+	SDL_FreeSurface(bellImage);
+	SDL_FreeSurface(keyImage);
 }
 
 SDL_Surface *load_img(const char *filename)
@@ -286,4 +326,19 @@ SDL_Surface* small_pill_img(void)
 SDL_Surface* large_pill_img(void)
 {
 	return largePill;
+}
+
+SDL_Surface* get_fruit_img(Fruit_t fruit)
+{
+	switch (fruit)
+	{
+		case Cherry:     return cherryImage;
+		case Strawberry: return strawberryImage;
+		case Peach:      return peachImage;
+		case Apple:      return appleImage;
+		case Grapes:     return grapesImage;
+		case Galaxian:   return galaxianImage;
+		case Bell:       return bellImage;
+		case Key:        return keyImage;
+	}
 }
