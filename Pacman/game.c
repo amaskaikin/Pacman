@@ -6,9 +6,11 @@
 #include "in.h"
 #include "characters.h"
 #include "anim.h"
+#include "physcs.h"
 
 static void process_player(Game_t *game);
 static void process_pills(Game_t *game);
+static void process_ghosts(Game_t *game);
 
 static int resolve_telesquare(Body_t *body);  
 
@@ -19,6 +21,7 @@ void g_tick(Game_t *game)
 	//printf("dt: %d\n", dt);
 	process_player(game);
 	process_pills(game);
+	process_ghosts(game);
 
 	lives = game->pacman.lives;
 
@@ -26,6 +29,7 @@ void g_tick(Game_t *game)
 
 void g_render(Game_t *game)
 {
+	int i;
 	unsigned dt = ticks_game();
 	draw_border(&game->border);
 	draw_small_pills(&game->collectPills);
@@ -35,7 +39,11 @@ void g_render(Game_t *game)
 	draw_pacman_lives(game->pacman.lives);
 	draw_fruit_indicators(game->level);
 	draw_pacman(&game->pacman);
-	
+
+	for (i = 0; i < 4; i++) 
+	{
+		draw_ghost(&game->ghosts[i]);
+	}	
 }
 
 void init_game(Game_t *game)
@@ -153,6 +161,32 @@ static void process_pills(Game_t *game)
 			game->pacman.missedFrames = pill_nopframes(p);
 
 			return;
+		}
+	}
+}
+
+static void process_ghosts(Game_t *game)
+{
+	int i;
+	MovRes_t result;
+	for (i = 0; i < 4; i++)
+	{
+		result = move_ghost(&game->ghosts[i].body);
+		resolve_telesquare(&game->ghosts[i].body);
+
+		if (result == NewSquare)
+		{
+			//if they are in a new tile, rerun their target update logic
+			get_ghost_logic(&game->ghosts[i], game->ghosts[i].type, &game->ghosts[0], &game->pacman);
+
+			game->ghosts[i].nextDirect = next_direction(&game->ghosts[i], &game->border);
+		}
+		else if (result == OverCenter)
+		{
+			//they've hit the center of a tile, so change their current direction to the new direction
+			game->ghosts[i].body.cur = game->ghosts[i].transDirect;
+			game->ghosts[i].body.next = game->ghosts[i].nextDirect;
+			game->ghosts[i].transDirect = game->ghosts[i].nextDirect;
 		}
 	}
 }

@@ -9,6 +9,7 @@ typedef struct
 {
 	Border_t border;
 	Pacman_t pacman;
+	Ghost_t ghosts[4];
 	CollectPills_t collectPills;
 	int level;
 } Game_t;

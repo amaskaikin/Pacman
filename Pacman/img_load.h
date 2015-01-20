@@ -31,3 +31,5 @@ SDL_Surface* small_pill_img(void);
 SDL_Surface* large_pill_img(void);
 
 SDL_Surface* get_fruit_img(Fruit_t fruit);
+
+SDL_Surface* ghost_img(GhostType_t type, Direction_t dir, int frame);

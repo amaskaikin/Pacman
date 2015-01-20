@@ -19,6 +19,12 @@ void draw_pacman(Pacman_t *pacman);
 void draw_pacman_lives(int numLives);
 
 //
+// Ghost rendering
+//
+
+void draw_ghost(Ghost_t *ghost);
+
+//
 // Pill renderering
 //
 

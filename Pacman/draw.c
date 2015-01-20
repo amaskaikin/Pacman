@@ -183,3 +183,21 @@ void draw_fruit_game(int currentLevel)
 	//TODO: maybe this offset isn't the same for all fruit. Investigate
 	draw_image_coord_offset(image, 13, 19, 0, 8);
 }
+
+//
+// Ghost rendering
+//
+
+void draw_ghost(Ghost_t *ghost)
+{
+	int xOffset, yOffset, x, y;
+	SDL_Surface *image = ghost_img(ghost->type, ghost->body.cur, 0);
+
+	x = ghost->body.x;
+	y = ghost->body.y + Y_OFFSET;
+
+	xOffset = ghost->body.xOffset - 6;
+	yOffset = ghost->body.yOffset - 6;
+
+	draw_image_coord_offset(image, x, y, xOffset, yOffset);
+}

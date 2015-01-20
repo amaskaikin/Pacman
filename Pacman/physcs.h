@@ -23,7 +23,12 @@ typedef enum
 	SameSquare  //Object has moved within square without moving over the center
 } MovRes_t;
 
+//Determines if the bodies face based on their square only
+int faces(Body_t *body1, Body_t *body2);
+
 int faces_obj(Body_t *body, int otherX, int otherY);
+
+MovRes_t move_ghost(Body_t *body);
 
 int move_pacman(Body_t *body, int canMoveCur, int canMoveNext);
 

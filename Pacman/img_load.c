@@ -5,6 +5,11 @@
 
 #include "img_load.h"
 
+char *red_dir = "images\\entities\\ghosts\\red\\";
+char *pink_dir = "images\\entities\\ghosts\\pink\\";
+char *cyan_dir = "images\\entities\\ghosts\\cyan\\";
+char *orange_dir = "images\\entities\\ghosts\\orange\\";
+
 SDL_Surface *load_img(const char *filename);
 
 //
@@ -34,6 +39,13 @@ SDL_Surface *deathPacman[11];
 SDL_Surface *pacmanLifeIcon;
 
 //
+//ghost sprites
+//
+
+//ghosts have 4 colors * 2 images for main animatino
+SDL_Surface *ghosts[4][4][2];
+
+//
 //feauters sprites
 //
 
@@ -55,11 +67,13 @@ SDL_Surface *keyImage;
 void load_border_imgs(void);
 void load_pacman_imgs(void);
 void load_feature_imgs(void);
+void load_ghost_imgs(void);
 void load_fruit_imgs(void);
 
 void set_border_imgs(void);
 void set_pacman_imgs(void);
 void set_feature_imgs(void);
+void set_ghost_imgs(void);
 void set_fruit_imgs(void);
 
 void load_imgs(void)
@@ -67,6 +81,7 @@ void load_imgs(void)
 	load_border_imgs();
 	load_pacman_imgs();
 	load_feature_imgs();
+	load_ghost_imgs();
 	load_fruit_imgs();
 }
 
@@ -76,6 +91,7 @@ void set_imgs(void)
 	set_pacman_imgs();
 	set_feature_imgs();
 	set_fruit_imgs();
+	set_ghost_imgs();
 }
 
 void load_diags(SDL_Surface *imgs[4], const char *file)
@@ -210,6 +226,57 @@ void set_fruit_imgs(void)
 	SDL_FreeSurface(keyImage);
 }
 
+char *get_ghost_dir(int type)
+{
+	switch (type)
+	{
+		case Blinky: return red_dir;
+		case Inky:   return cyan_dir;
+		case Pinky:  return pink_dir;
+		case Clyde:  return orange_dir;
+	}
+
+	return NULL;
+}
+
+void load_ghost_imgs(void)
+{
+	char dirStr[256];
+	int col, i;
+
+	for (col = 0; col < 4; col++)
+	{
+		for (i = 0; i < 2; i++)
+		{
+			sprintf(dirStr, "%s%s%d%s", get_ghost_dir(col), "u", i, ".png");
+			ghosts[col][0][i] = load_img(dirStr);
+
+			sprintf(dirStr, "%s%s%d%s", get_ghost_dir(col), "d", i, ".png");
+			ghosts[col][1][i] = load_img(dirStr);
+
+			sprintf(dirStr, "%s%s%d%s", get_ghost_dir(col), "l", i, ".png");
+			ghosts[col][2][i] = load_img(dirStr);
+
+			sprintf(dirStr, "%s%s%d%s", get_ghost_dir(col), "r", i, ".png");
+			ghosts[col][3][i] = load_img(dirStr);
+		}
+	}
+}
+
+void set_ghost_imgs(void)
+{
+	int i,j;
+	for (i = 0; i < 4; i++)
+	{
+		for (j = 0; j < 4; j++)
+		{
+			SDL_FreeSurface(ghosts[i][j][0]);
+			SDL_FreeSurface(ghosts[i][j][1]);
+		}
+	}
+}
+
+
 SDL_Surface *load_img(const char *filename)
 {
 	//The img that's loaded
@@ -341,4 +408,9 @@ SDL_Surface* get_fruit_img(Fruit_t fruit)
 		case Bell:       return bellImage;
 		case Key:        return keyImage;
 	}
+}
+
+SDL_Surface* ghost_img(GhostType_t type, Direction_t dir, int frame)
+{
+	return ghosts[type][dir][frame];
 }
