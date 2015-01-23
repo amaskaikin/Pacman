@@ -64,10 +64,11 @@ void reset_ghosts(Ghost_t *ghost, GhostType_t type)
 
 	switch (type)
 	{
+		//testing
 		case Blinky: { x = 14; y = 11; ox = -8; oy =  0; dir = Left; next = Left; break; }
-		case Inky: { x = 16; y = 14; ox = -8; oy =  0; dir = Up;   next = Down; break; }
-		case Clyde: { x = 12; y = 14; ox = -8; oy =  0; dir = Up;   next = Down; break; }
-		case Pinky: { x = 14; y = 14; ox = -8; oy =  0; dir = Down; next = Up; break; }
+		case Inky: { x = 16; y = 11; ox = -8; oy =  0; dir = Left;   next = Left; break; }
+		case Clyde: { x = 12; y = 11; ox = -8; oy =  0; dir = Left;   next = Left; break; }
+		case Pinky: { x = 14; y = 11; ox = -8; oy =  0; dir = Left; next = Left; break; }
 	}
 
 	ghost->body.x = x;
@@ -79,6 +80,7 @@ void reset_ghosts(Ghost_t *ghost, GhostType_t type)
 	ghost->body.xOffsetInternal = 0;
 	ghost->body.yOffsetInternal = 0;
 
+	ghost->body.velocity = 80;
 	ghost->transDirect = Left;
 	ghost->nextDirect = Left;
 }
@@ -172,13 +174,16 @@ Direction_t next_direction(Ghost_t *ghost, Border_t *border)
 
 void get_ghost_logic(Ghost_t *targetGhost, GhostType_t type, Ghost_t *redGhost, Pacman_t *pacman)
 {
-	switch (type)
+	go_home(targetGhost, type);
+		return;
+
+	/*switch (type)
 	{
 		case Blinky: get_red_logic(targetGhost, pacman);            break;
 		case Inky:   get_blue_logic(targetGhost, pacman);			break;
 		case Clyde:  get_orange_logic(targetGhost, pacman);         break;
 		case Pinky:  get_pink_logic(targetGhost, pacman);           break;
-	}
+	}*/
 }
 
 void get_red_logic(Ghost_t *redGhost, Pacman_t *pacman)

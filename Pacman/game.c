@@ -20,8 +20,9 @@ void g_tick(Game_t *game)
 	unsigned dt = ticks_game();
 	//printf("dt: %d\n", dt);
 	process_player(game);
-	process_pills(game);
 	process_ghosts(game);
+	process_pills(game);
+	
 
 	lives = game->pacman.lives;
 
@@ -51,6 +52,7 @@ void init_game(Game_t *game)
 	init_pacman(&game->pacman);
 	init_pills(&game->collectPills);
 	game->level = 1;
+	init_ghosts(game->ghosts);
 }
 
 static void process_player(Game_t *game)

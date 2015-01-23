@@ -22,7 +22,7 @@ int move_pacman(Body_t *body, int canMoveCur, int canMoveNext)
 	//int high = 7;
 	int low = -8;
 	int high = 7;
-	int offset = 15;
+	int offset = 17;
 	
 	//we have double pixels so multiply by 2
 	int BASE_VALUE = 75 * 2;
@@ -213,6 +213,71 @@ MovRes_t move_ghost(Body_t *body)
 
 	overCenter = 0;
 	overOffset = 0;
+
+	//move over center square
+	if ((xBefore < 0 && xNow >= 0) || (xBefore > 0 && xNow <= 0))
+	{
+		overCenter = 1;
+
+		result = OverCenter;
+
+		overOffset = abs(body->xOffset) * MULT_VALUE + abs(body->xOffsetInternal);
+
+		body->cur = body->next;
+	}
+	else if ((yBefore < 0 && yNow >= 0) || (yBefore > 0 && yNow <= 0))
+	{
+		overCenter = 1;
+
+		result = OverCenter;
+
+		//transitioned over
+		overOffset = abs(body->xOffset) * MULT_VALUE + abs(body->xOffsetInternal);
+
+		body->cur = body->next;
+	}
+
+	if (overCenter)
+	{
+		direct_xy(body->cur, &xDir, &yDir);
+
+		body->xOffset = overOffset / MULT_VALUE * xDir;
+		body->yOffset = overOffset / MULT_VALUE * yDir;
+
+		body->xOffsetInternal = (overOffset % MULT_VALUE) * xDir;
+		body->yOffsetInternal = (overOffset % MULT_VALUE) * yDir;
+
+		return result;
+	}
+	
+	if (body->xOffset < low)
+	{
+		body->xOffset += offset;
+		body->x--;
+
+		result = NewSquare;
+	}
+	else if (body->xOffset > high)
+	{
+		body->xOffset -= offset;
+		body->x++;
+
+		result = NewSquare;
+	}
+	else if (body->yOffset < low)
+	{
+		body->yOffset += offset;
+		body->y--;
+
+		result = NewSquare;
+	}
+	else if (body->yOffset > high)
+	{
+		body->yOffset -= offset;
+		body->y++;
+
+		result = NewSquare;
+	}
 
 	return result;
 }
