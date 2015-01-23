@@ -213,12 +213,37 @@ void get_orange_logic(Ghost_t *orangeGhost, Pacman_t *pacman)
 
 void get_blue_logic(Ghost_t *blueGhost, Ghost_t *redGhost, Pacman_t *pacman)
 {
+	int tx, ty, rx, ry, targetX, targetY;
+	int offsetX = 0;
+	int offsetY = 0;
 
+	offsetX *= 2;
+	offsetY *= 2;
+
+	tx = pacman->body.x + offsetX;
+	ty = pacman->body.y + offsetY;
+
+	rx = redGhost->body.x;
+	ry = redGhost->body.y;
+
+	targetX = 2 * tx - rx;
+	targetY = 2 * ty - ry;
+
+	blueGhost->targetX = targetX;
+	blueGhost->targetY = targetY;
 }
 
 void get_pink_logic(Ghost_t *pinkGhost, Pacman_t *pacman)
 {
+	// Pinks's AI is to set his target position to pacmans, plus a few more in the distance
+	int targetOffsetX = 0;
+	int targetOffsetY = 0;
 
+	targetOffsetX *= 4;
+	targetOffsetY *= 4;
+
+	pinkGhost->targetX = pacman->body.x + targetOffsetX;
+	pinkGhost->targetY = pacman->body.y + targetOffsetY;
 }
 
 int ghost_speed_normal(int lvl)
