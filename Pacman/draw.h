@@ -17,6 +17,7 @@ void draw_border(Border_t *border);
 void draw_pacman_static(Pacman_t *pacman);
 void draw_pacman(Pacman_t *pacman);
 void draw_pacman_lives(int numLives);
+void draw_pacman_death(Pacman_t *pacman, unsigned int timeSinceDeath);
 
 //
 // Ghost rendering

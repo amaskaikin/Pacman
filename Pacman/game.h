@@ -5,12 +5,25 @@
 #include "frames.h"
 #include "features.h"
 
+typedef enum
+{
+	GameBegin,
+	LevelBegin,
+	GamePlay,
+	Win,
+	Death,
+	Gameover
+} StateGame_t;
+
 typedef struct
 {
 	Border_t border;
 	Pacman_t pacman;
 	Ghost_t ghosts[4];
 	CollectPills_t collectPills;
+	StateGame_t stategame;
+	unsigned int ticksNewMode;
+	DispFruit_t dispFruit1, dispFruit2;
 	int level;
 } Game_t;
 
@@ -23,4 +36,7 @@ void g_render(Game_t *game);
 //Init first level
 void init_game(Game_t *game);
 
-void process_player(Game_t *game);
+//Init next level
+void new_level(Game_t *game);
+
+void death(Game_t *game);

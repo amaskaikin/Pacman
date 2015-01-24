@@ -172,6 +172,13 @@ void load_pacman_imgs(void)
 	aniPacman[3][0] = load_img("images\\entities\\pacman\\d0.png");
 	aniPacman[3][1] = load_img("images\\entities\\pacman\\d1.png");
 	aniPacman[3][2] = aniPacman[3][0];
+
+	for (i = 0; i < 11; i++)
+	{
+		sprintf(dirStr, "%s%s%d%s", "images\\entities\\pacman\\death\\", "death", i, ".png");
+
+		deathPacman[i] = load_img(dirStr);
+	}
 }
 
 void set_pacman_imgs(void)
@@ -356,6 +363,11 @@ SDL_Surface* corral_gate_img(void)
 SDL_Surface* pacman_img(void)
 {
 	return pacman;
+}
+
+SDL_Surface* pacman_death_img(int i)
+{
+	return deathPacman[i];
 }
 
 SDL_Surface *pacman_ani_img(Direction_t dir, int frame)

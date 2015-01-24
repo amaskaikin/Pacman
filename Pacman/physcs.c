@@ -1,6 +1,11 @@
 #include "physcs.h"
 #include <stdlib.h>
 
+int faces(Body_t *body1, Body_t *body2)
+{
+	return body1->x == body2->x && body1->y == body2->y;
+}
+
 int faces_obj(Body_t *body, int otherX, int otherY)
 {
 	return body->x == otherX && body->y == otherY;

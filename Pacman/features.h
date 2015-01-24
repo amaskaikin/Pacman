@@ -76,3 +76,7 @@ typedef struct
 Fruit_t fruit_nextlvl(int lvl);
 
 void reset_fruit(DispFruit_t *dispfruit);
+
+void show_fruit(DispFruit_t *dispFruit, int lvl);
+
+int rand_time(void);

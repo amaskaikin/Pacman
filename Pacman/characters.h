@@ -41,6 +41,16 @@ void init_pacmanloc(Pacman_t *pacman);
 //Returns pacman speed for given level
 int pacman_speed_normal(int lvl);
 
+typedef enum
+{
+	In,      
+	Leaving, 
+	Chase,      
+	Scatter,    
+	Frightened, 
+	Eaten       
+} GhostState_t;
+
 //Define ghosts type
 typedef enum
 {
@@ -59,6 +69,7 @@ typedef struct
 	Direction_t transDirect; //direction ghost should face for middle of current square to middle of next square
 	Direction_t nextDirect;  ////direction ghost should face when reaching the center of the next square
 	GhostType_t type;
+	GhostState_t state;
 } Ghost_t;
 
 void init_ghosts(Ghost_t ghosts[4]);

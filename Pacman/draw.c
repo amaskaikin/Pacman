@@ -105,6 +105,42 @@ void draw_pacman_lives(int numLives)
 	}
 }
 
+void draw_pacman_death(Pacman_t *pacman, unsigned int dt)
+{
+	int xOffset, yOffset;
+	unsigned int hang1 = 200;
+	unsigned int perFrame = 140;
+	unsigned int hang2 = 200;
+
+	int numFrames = 11;
+
+	SDL_Surface *image;
+
+	if (dt < hang1)
+	{
+		image = pacman_death_img(0);
+	}
+	else if (dt < (hang1 + numFrames * perFrame))
+	{
+		int i = anim_get_frame_dt(dt - hang1, perFrame, numFrames);
+
+		image = pacman_death_img(i);
+	}
+	else if (dt < (hang1 + numFrames * perFrame + hang2))
+	{
+		image = pacman_death_img(10);
+	}
+	else
+	{
+		return;
+	}
+
+	xOffset = pacman->body.xOffset - 4;
+	yOffset = offset + pacman->body.yOffset - 6;
+
+	draw_image_coord_offset(image, pacman->body.x, pacman->body.y, xOffset, yOffset);
+}
+
 //
 //
 // PIll renderering

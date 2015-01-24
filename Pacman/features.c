@@ -27,12 +27,6 @@ int pill_nopframes(Pill_t *pill)
 
 Fruit_t fruit_nextlvl(int lvl)
 {
-	if (lvl < 1)
-	{
-		printf("invalid level: %d\n", lvl);
-		exit(1);
-	}
-
 	switch (lvl)
 	{
 		case 1:           return Cherry;
@@ -56,4 +50,16 @@ void reset_fruit(DispFruit_t *dispfruit)
 	dispfruit->timeEaten = 0;
 	dispfruit->x = 13;
 	dispfruit->y = 17;
+}
+
+void show_fruit(DispFruit_t *dispFruit, int lvl)
+{
+	dispFruit->fruit = fruit_nextlvl(lvl);
+	dispFruit->show = rand_time();
+	dispFruit->start = ticks_game();
+}
+
+int rand_time(void)
+{
+	return 9500;
 }

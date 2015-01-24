@@ -9,6 +9,12 @@
 #include "in.h"
 #include "frames.h"
 
+//Initializes all resources.
+static void resource_init(void);
+
+//Initialize all the internal entities needed for the game at startup
+static void game_init(void);
+
 //Called when a game is about to begin
 static void startgame_init(void);
 
@@ -28,12 +34,10 @@ static Game_t pacmanGame;
 static ProgramState_t state = Start;
 static int gameRunning = 1;
 
-int main(int argc, char** argv) {
-   
-	init_window(SCREEN_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
-	load_imgs();
-	load_border(&pacmanGame.border, &pacmanGame.collectPills, "maps/encodedboard");
-	init_fps(60);
+int main(int argc, char** argv) 
+{
+	resource_init();
+	game_init();
 
 	main_loop();
 	clean_up();
@@ -73,6 +77,25 @@ static void internal_tick(void)
 static void startgame_init(void)
 {
 	init_game(&pacmanGame);
+}
+
+static void game_init(void)
+{
+	//Load the board here. We only need to do it once
+	load_border(&pacmanGame.border, &pacmanGame.collectPills, "maps/encodedboard");
+
+	//set to be Start
+	state = Start;
+
+	//init the framerate manager
+	init_fps(60);
+
+}
+
+static void resource_init(void)
+{
+	init_window(SCREEN_TITLE, SCREEN_WIDTH, SCREEN_HEIGHT);
+	load_imgs();
 }
 
 static void process_events(void)
