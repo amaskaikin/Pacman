@@ -135,7 +135,8 @@ void g_tick(Game_t *game)
 		case Death:
 			if (dt > 4000)
 			{
-				if (lives == 0) enter_state(game, Gameover);
+				if (lives == 0) 
+					enter_state(game, Gameover);
 				else enter_state(game, LevelBegin);
 			}
 
@@ -155,18 +156,18 @@ void g_render(Game_t *game)
 	{
 		int i;
 		case GameBegin:
-			draw_large_pills(&game->collectPills);
+			draw_large_pills(&game->collectPills, 0);
 			draw_border(&game->border);
 			break;
 		case LevelBegin:
 			draw_pacman_static(&game->pacman);
 			for (i = 0; i < 4; i++) draw_ghost(&game->ghosts[i]);
 
-			draw_large_pills(&game->collectPills);
+			draw_large_pills(&game->collectPills, 0);
 			draw_border(&game->border);
 			break;
 		case GamePlay:
-			draw_large_pills(&game->collectPills);
+			draw_large_pills(&game->collectPills, 1);
 			draw_border(&game->border);
 
 			if (game->dispFruit1.mode == Displaying) draw_fruit_game(game->level);
@@ -199,10 +200,14 @@ void g_render(Game_t *game)
 				for (i = 0; i < 4; i++) draw_ghost(&game->ghosts[i]);
 				draw_border(&game->border);
 			}
+			else
+			{
+				draw_border_flash(&game->border);
+			}
 
 			break;
 		case Death:
-			//draw everything the same for 1ish second
+			//draw everything the same for 1ist second
 			if (dt < 1000)
 			{
 				int i;
@@ -216,7 +221,7 @@ void g_render(Game_t *game)
 				draw_pacman_death(&game->pacman, dt - 1000);
 			}
 
-			draw_large_pills(&game->collectPills);
+			draw_large_pills(&game->collectPills, 1);
 			draw_border(&game->border);
 			break;
 		case Gameover:
@@ -259,6 +264,13 @@ void death(Game_t *game)
 	reset_fruit(&game->dispFruit2);
 }
 
+int game_over(Game_t *game)
+{
+	unsigned dt = ticks_game() - game->ticksNewMode;
+
+	return dt > 2000 && game->stategame == Gameover;
+}
+
 static void enter_state(Game_t *game, StateGame_t state)
 {
 	//process leaving a state
@@ -280,6 +292,23 @@ static void enter_state(Game_t *game, StateGame_t state)
 				death(game);
 			}
 		default: ; //do nothing
+	}
+
+	switch (state)
+	{
+		case GameBegin:
+			break;
+		case LevelBegin:
+			break;
+		case GamePlay:
+			break;
+		case Win:
+
+			break;
+		case Death:
+			break;
+		case Gameover:
+			break;
 	}
 
 	game->ticksNewMode = ticks_game();

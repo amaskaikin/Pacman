@@ -60,6 +60,9 @@ void init_game(Game_t *game);
 //Init next level
 void new_level(Game_t *game);
 
+//Check gameover
+int game_over(Game_t *game);
+
 void death(Game_t *game);
 
 #endif

@@ -46,6 +46,22 @@ void draw_border(Border_t *border)
 	}
 }
 
+void draw_border_flash(Border_t *border)
+{
+	int x, y;
+	int animate = anim_get_frame(250, 2);
+
+	if (animate) return;
+
+	for (y = 0; y < BORDER_HEIGHT; y++)
+	{
+		for (x = 0; x < BORDER_LENGTH; x++)
+		{
+			set_surface(x * 16, offset + y * 16, (border->borderSquares[x][y]).img);
+		}
+	}
+}
+
 //
 //
 // Pacman renderering
@@ -166,16 +182,19 @@ void draw_small_pills(CollectPills_t *cp)
 	}
 }
 
-void draw_large_pills(CollectPills_t *cp)
+void draw_large_pills(CollectPills_t *cp, int flashing)
 {
 	int i;
-
+	//actual tick rate is 10 * (1 / 60), or 10 frames
+	//this comes out to 166.666 ms
+	int frame = anim_get_frame(167, 2);
 	for (i = 0; i < PILLS_NUMBER; i++)
 	{
 		Pill_t p = cp->Pills[i];
 
 		if (p.type != Large) continue;
 		if (p.exist) continue;
+		if (flashing && frame == 1) continue;
 
 		set_surface(p.x * 16, offset + p.y * 16, p.img);
 	}

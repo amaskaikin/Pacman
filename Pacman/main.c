@@ -71,6 +71,11 @@ static void internal_tick(void)
 			break;
 		case Game:
 			g_tick(&pacmanGame);
+
+			if (game_over(&pacmanGame))
+			{
+				state = Start;
+			}
 	}
 }
 
