@@ -380,6 +380,40 @@ static void process_ghosts(Game_t *game)
 	MovRes_t result;
 	for (i = 0; i < 4; i++)
 	{
+		if (game->ghosts[i].state == In)
+		{
+			int moved = move_ghost(&game->ghosts[i].body);
+
+			if (game->ghosts[i].body.y == 13 || game->ghosts[i].body.y == 15)
+			{
+				game->ghosts[i].body.cur = direct_opp(game->ghosts[i].body.next);
+				game->ghosts[i].body.next = game->ghosts[i].body.cur;				
+			}
+
+			continue;
+		}
+
+		if (game->ghosts[i].state == Leaving)
+		{
+			Direction_t up = Up, left = Left, right = Right;
+			int flPinky = 0;
+			int moved = move_ghost(&game->ghosts[i].body);
+			switch (game->ghosts[i].type)
+			{
+				case Pinky: { game->ghosts[i].state = Scatter; flPinky = 1;} break;
+				case Inky:	{ game->ghosts[i].body.next = left; } break;
+				case Clyde:	{ game->ghosts[i].body.next = right;  } break;				
+			}
+			if (game->ghosts[i].body.x == 14)
+			{
+				game->ghosts[i].body.next = up;
+				move_ghost(&game->ghosts[i].body);
+				if (game->ghosts[i].body.y == 11 && !flPinky) game->ghosts[i].state = Chase;
+			}
+			
+			continue;
+		}
+
 		result = move_ghost(&game->ghosts[i].body);
 		resolve_telesquare(&game->ghosts[i].body);
 
@@ -397,6 +431,8 @@ static void process_ghosts(Game_t *game)
 			game->ghosts[i].body.next = game->ghosts[i].nextDirect;
 			game->ghosts[i].transDirect = game->ghosts[i].nextDirect;
 		}
+
+		
 	}
 }
 
@@ -535,7 +571,7 @@ static void change_speed(Game_t *game)
 		if (game->ghosts[i].state == In) game->ghosts[i].body.velocity = ghost_speed_tunnel(game->level);
 		else if (game->ghosts[i].state == Frightened) game->ghosts[i].body.velocity = ghost_speed_fear(game->level);
 		else game->ghosts[i].body.velocity = ghost_speed_normal(game->level);
-		//printf("Ghost speed: %d", game->ghosts[i].body.velocity);
+		printf("Ghost speed: %d", game->ghosts[i].body.velocity);
 		//printf("level %d \n", game->level);
 	}
 }
@@ -546,6 +582,7 @@ static int check_leave(Game_t *game, Ghost_t *g, int InkyCounter, int ClydeCount
 	{
 	case Inky:
 		{
+			if (InkyCounter == 1) return 1;
 			if (((game->collectPills.totalPills - game->collectPills.existPills) >= 30) && !InkyCounter)
 			{
 				g->state = Leaving; game->InkyCounter = 1 ; return 1;
@@ -554,6 +591,7 @@ static int check_leave(Game_t *game, Ghost_t *g, int InkyCounter, int ClydeCount
 		}
 	case Clyde: 
 		{
+			if (ClydeCounter == 1) return 1;
 			if (((game->collectPills.totalPills - game->collectPills.existPills) >= 90) && !ClydeCounter) 
 			{
 				g->state = Leaving; game->ClydeCounter = 1; return 1;

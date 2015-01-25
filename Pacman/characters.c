@@ -65,7 +65,6 @@ void reset_ghosts(Ghost_t *ghost, GhostType_t type)
 
 	switch (type)
 	{
-		//testing
 		case Blinky: { x = 14; y = 11; ox = -8; oy =  0; state = Scatter; dir = Left; next = Left; break; }
 		case Inky: { x = 16; y = 14; ox = -8; oy =  0; state = In; dir = Up;   next = Down; break; }
 		case Clyde: { x = 12; y = 14; ox = -8; oy =  0; state = In; dir = Up;   next = Down; break; }
@@ -81,7 +80,6 @@ void reset_ghosts(Ghost_t *ghost, GhostType_t type)
 	ghost->body.xOffsetInternal = 0;
 	ghost->body.yOffsetInternal = 0;
 
-	ghost->body.velocity = 80;
 	ghost->transDirect = Left;
 	ghost->nextDirect = Left;
 }
@@ -175,16 +173,19 @@ Direction_t next_direction(Ghost_t *ghost, Border_t *border)
 
 void get_ghost_logic(Ghost_t *targetGhost, GhostType_t type, Ghost_t *redGhost, Pacman_t *pacman)
 {
-	go_home(targetGhost, type);
+	if (targetGhost->state == Scatter)
+	{
+		go_home(targetGhost, type);
 		return;
+	}
 
-	/*switch (type)
+	switch (type)
 	{
 		case Blinky: get_red_logic(targetGhost, pacman);            break;
-		case Inky:   get_blue_logic(targetGhost, pacman);			break;
+		case Inky:   get_blue_logic(targetGhost, redGhost, pacman);	break;
 		case Clyde:  get_orange_logic(targetGhost, pacman);         break;
 		case Pinky:  get_pink_logic(targetGhost, pacman);           break;
-	}*/
+	}
 }
 
 void get_red_logic(Ghost_t *redGhost, Pacman_t *pacman)
@@ -218,6 +219,9 @@ void get_blue_logic(Ghost_t *blueGhost, Ghost_t *redGhost, Pacman_t *pacman)
 	int offsetX = 0;
 	int offsetY = 0;
 
+	//use dir_xy_buggy to get 2 up AND 2 left, as per bug in original game
+	direct_xy_bug(pacman->body.cur, &offsetX, &offsetY);
+
 	offsetX *= 2;
 	offsetY *= 2;
 
@@ -239,6 +243,9 @@ void get_pink_logic(Ghost_t *pinkGhost, Pacman_t *pacman)
 	// Pinks's AI is to set his target position to pacmans, plus a few more in the distance
 	int targetOffsetX = 0;
 	int targetOffsetY = 0;
+
+	//use dir_xy_buggy to get 4 up AND 4 left, as per bug in original game
+	direct_xy_bug(pacman->body.cur, &targetOffsetX, &targetOffsetY);
 
 	targetOffsetX *= 4;
 	targetOffsetY *= 4;

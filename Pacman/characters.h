@@ -82,7 +82,7 @@ void get_ghost_logic(Ghost_t *targetGhost, GhostType_t type, Ghost_t *redGhost, 
 Direction_t next_direction(Ghost_t *ghost, Border_t *border);
 
 void get_red_logic(Ghost_t *red, Pacman_t *pacman);
-void get_blue_logic(Ghost_t *blue, Pacman_t *pacman);
+void get_blue_logic(Ghost_t *blue, Ghost_t *redGhost, Pacman_t *pacman);
 void get_pink_logic(Ghost_t *pink, Pacman_t *pacman);
 void get_orange_logic(Ghost_t *orange, Pacman_t *pacman);
 

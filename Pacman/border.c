@@ -108,8 +108,6 @@ void load_border(Border_t *border, CollectPills_t *collectPills, const char* fil
 				walkable = 0;
 				break;
 			default:
-				printf("Error loading character: %c (int: %d) at coordinate (%d, %d) in boardfile %s\n", c, c, x, y, file);
-				exit(1);
 				break;
 		}
 		border->borderSquares[x][y].img = img;
