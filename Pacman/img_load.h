@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _IMG_LOAD
+#define _IMG_LOAD
 
 #include "SDL.h"
 #include "SDL_image.h"
@@ -33,3 +34,6 @@ SDL_Surface* large_pill_img(void);
 SDL_Surface* get_fruit_img(Fruit_t fruit);
 
 SDL_Surface* ghost_img(GhostType_t type, Direction_t dir, int frame);
+SDL_Surface* scared_ghost_img();
+
+#endif

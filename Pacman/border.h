@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _BORDER
+#define _BORDER
 
 #include "SDL.h"
 #include "SDL_image.h"
@@ -39,3 +40,5 @@ int isvalid_sq(Border_t *border, int x, int y);
 int isteleport_sq(int x, int y); //Return 1 if the square is teleport
 
 void load_border(Border_t *border, CollectPills_t *collectPills, const char* file);
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _ANIM
+#define _ANIM
 
 #include "SDL.h"
 #include "SDL_image.h"
@@ -13,3 +14,5 @@ typedef struct
 int anim_getFrame(Animation_t *anim);
 int anim_get_frame(int msBetweenFrames, int framesNum);
 int anim_get_frame_dt(int currentDt, int msBetweenFrames, int framesNum);
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _CHARACTERS
+#define _CHARACTERS
 
 #include "border.h"
 #include "direction.h"
@@ -41,6 +42,9 @@ void init_pacmanloc(Pacman_t *pacman);
 //Returns pacman speed for given level
 int pacman_speed_normal(int lvl);
 
+//Returns pacman speed for given level in fright mode.
+int pacman_speed_fear(int lvl);
+
 typedef enum
 {
 	In,      
@@ -78,6 +82,8 @@ void reset_ghosts(Ghost_t *ghost, GhostType_t type);
 
 void get_ghost_logic(Ghost_t *targetGhost, GhostType_t type, Ghost_t *redGhost, Pacman_t *pacman);
 
+void to_corral(Ghost_t *ghost);
+
 //gets the next direction the ghost will travel in based on their target square
 Direction_t next_direction(Ghost_t *ghost, Border_t *border);
 
@@ -89,3 +95,5 @@ void get_orange_logic(Ghost_t *orange, Pacman_t *pacman);
 int ghost_speed_normal(int lvl);
 int ghost_speed_fear(int lvl);
 int ghost_speed_tunnel(int lvl);
+
+#endif

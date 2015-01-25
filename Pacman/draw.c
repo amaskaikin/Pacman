@@ -237,3 +237,17 @@ void draw_ghost(Ghost_t *ghost)
 
 	draw_image_coord_offset(image, x, y, xOffset, yOffset);
 }
+
+void draw_scared_ghost(Ghost_t *ghost)
+{
+	int xOffset, yOffset, x, y;
+	SDL_Surface *image = scared_ghost_img();
+
+	x = ghost->body.x;
+	y = ghost->body.y + Y_OFFSET;
+
+	xOffset = ghost->body.xOffset - 6;
+	yOffset = ghost->body.yOffset - 6;
+
+	draw_image_coord_offset(image, x, y, xOffset, yOffset);	
+}

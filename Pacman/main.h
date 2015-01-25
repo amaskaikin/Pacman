@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _MAIN
+#define _MAIN
 
 //28 across, 36 down, 16 pixels each square.
 #define SCREEN_TITLE "Pacman"
@@ -12,3 +13,4 @@ typedef enum
 	Game
 } ProgramState_t;
 
+#endif

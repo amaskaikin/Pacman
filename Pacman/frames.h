@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _FRAMES
+#define _FRAMES
 
 //Initialises the FPS manager to the given frequency hz
 void init_fps(int hz);
@@ -21,3 +22,5 @@ unsigned int ticks_startup(void);
 unsigned int frames_game(void);
 //Returns the number of frames that have happened since the program starting
 unsigned int frames_startup(void);
+
+#endif

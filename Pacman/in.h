@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _IN
+#define _IN
 
 #include "SDL.h"
 #include "direction.h"
@@ -32,3 +33,5 @@ int key_pressed(int key);
 
 //Tests if the key was released this frame.
 int key_released(int key);
+
+#endif

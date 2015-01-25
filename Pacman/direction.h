@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _DIRECTION
+#define _DIRECTION
 
 //Define four main directios
 typedef enum
@@ -27,3 +28,5 @@ void direct_xy(Direction_t dir, int *x, int *y);
 /*Same behaviour as dir_xy() except this emulates the bug for ghosts where
 AI based on up direction is both Up *and* Left.*/
 void direct_xy_bug(Direction_t dir, int *x, int *y);
+
+#endif

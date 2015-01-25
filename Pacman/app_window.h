@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _APP_WINDOW
+#define _APP_WINDOW
 
 #include "SDL.h"
 
@@ -20,3 +21,4 @@ SDL_Surface *get_scr(void);
 //Cleans the screen to the given color.
 void clear_scr(int r, int g, int b, int a);
 
+#endif

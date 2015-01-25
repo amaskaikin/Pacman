@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _GAME
+#define _GAME
 
 #include "border.h"
 #include "characters.h"
@@ -25,17 +26,26 @@ typedef enum
 
 typedef struct
 {
+	GhostType_t type;
+	int collided;
+} Face_t;
+
+typedef struct
+{
 	Border_t border;
 	Pacman_t pacman;
 	Ghost_t ghosts[4];
 	CollectPills_t collectPills;
 	StateGame_t stategame;
 	TimeMode_t timemode;
+	Face_t face;
 	unsigned int ticksNewMode;
 	unsigned int lvltime;
+	unsigned int frighttime;
 	DispFruit_t dispFruit1, dispFruit2;
 	int level;
 	int InkyCounter, ClydeCounter;
+	int isfright;
 } Game_t;
 
 //Ticks(game 1 tick - 1/60th of a second)
@@ -51,3 +61,5 @@ void init_game(Game_t *game);
 void new_level(Game_t *game);
 
 void death(Game_t *game);
+
+#endif

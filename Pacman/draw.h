@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _DRAW
+#define _DRAW
 
 #include "border.h"
 #include "characters.h"
@@ -24,6 +25,7 @@ void draw_pacman_death(Pacman_t *pacman, unsigned int timeSinceDeath);
 //
 
 void draw_ghost(Ghost_t *ghost);
+void draw_scared_ghost(Ghost_t *ghost);
 
 //
 // Pill renderering
@@ -39,4 +41,6 @@ void draw_large_pills(CollectPills_t *cp);
 
 void draw_fruit_indicators(int currentLevel);
 void draw_fruit_game(int currentLevel);
+
+#endif
 

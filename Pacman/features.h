@@ -1,4 +1,5 @@
-#pragma once 
+#ifndef _FEATURES
+#define _FEATURES
 
 #include "SDL.h"
 
@@ -80,3 +81,5 @@ void reset_fruit(DispFruit_t *dispfruit);
 void show_fruit(DispFruit_t *dispFruit, int lvl);
 
 int rand_time(void);
+
+#endif

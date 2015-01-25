@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _PHYSCS
+#define _PHYSCS
 
 #include "direction.h"
 
@@ -40,3 +41,5 @@ int on_vert(Body_t *body);
 
 //Returns 1 if the body is in the center of a tile on the horozontal axis
 int on_horo(Body_t *body);
+
+#endif

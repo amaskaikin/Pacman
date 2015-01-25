@@ -18,16 +18,19 @@ static void process_fruit(Game_t *game);
 
 static void gameplay(Game_t *game, unsigned dtlvl);
 static void change_speed(Game_t *game);
-static int check_pacghost_facing(Game_t *game);    
+static Face_t* check_pacghost_facing(Game_t *game);    
 static GhostState_t check_ghosts_type(Ghost_t *g, GhostState_t state, int leave);
 static void enter_state(Game_t *game, StateGame_t state);
+static void to_frightmode(Game_t *game, Ghost_t *g, unsigned dtlarge);
 static int resolve_telesquare(Body_t *body);  
 static void time_mode(Ghost_t *g, TimeMode_t tmode, unsigned dtlvl, int leave, int mult, int lvl);
+static int check_leave(Game_t *game, Ghost_t *g, int InkyCounter, int ClydeCounter);
 
 static void gameplay(Game_t *game, unsigned dtlvl)
 {
 	int i, leave = 0;
-	//printf("lvl: %d", game->level);
+	if (game->isfright) return;
+
 	for (i = 0; i < 4; i++)
 	{
 		Ghost_t *g = &game->ghosts[i];
@@ -41,7 +44,6 @@ static void gameplay(Game_t *game, unsigned dtlvl)
 			if (dtlvl > 57*MULT_VALUE_LVL1 && dtlvl <82*MULT_VALUE_LVL1) time_mode(g, Mode3, dtlvl, leave, MULT_VALUE_LVL1, game->level);
 			if (dtlvl > 82*MULT_VALUE_LVL1)	time_mode(g, Mode4, dtlvl, leave, MULT_VALUE_LVL1, game->level);
 			change_speed(game);
-			//printf("State: %s", g->state);
 		}	
 
 		if ((game->level > 1) && (game->level < 5))
@@ -68,6 +70,7 @@ static void gameplay(Game_t *game, unsigned dtlvl)
 void g_tick(Game_t *game)
 {
 	int i, lives, allPillsEaten, collidedWithGhost;
+	Face_t *face = &game->face;
 	unsigned dt = ticks_game() - game->ticksNewMode;
 	unsigned dtlvl = ticks_game() - game->lvltime;
 
@@ -79,13 +82,19 @@ void g_tick(Game_t *game)
 			process_ghosts(game);
 
 			process_fruit(game);
-			process_pills(game);			
+			process_pills(game, dt);
+
+			if (game->isfright)
+			{
+				for (i = 0; i < 4; i++)	to_frightmode(game, &game->ghosts[i], dt);
+			}
+
 			break;
 		}
 	}
 
 	allPillsEaten = game->collectPills.existPills == 0;
-	collidedWithGhost = check_pacghost_facing(game);
+	face = check_pacghost_facing(game);
 	lives = game->pacman.lives;
 
 	switch (game->stategame)
@@ -104,7 +113,19 @@ void g_tick(Game_t *game)
 			gameplay(game, dtlvl);
 
 			if (allPillsEaten) enter_state(game, Win);
-			else if (collidedWithGhost) enter_state(game, Death);
+			else if (face->collided && !game->isfright) enter_state(game, Death);
+
+			if (face->collided && game->isfright)
+			{
+				switch (face->type)
+				{
+					case Blinky: to_corral(&game->ghosts[0]);  break;
+					case Inky:   to_corral(&game->ghosts[1]);  break;			
+					case Pinky:  to_corral(&game->ghosts[2]);  break;
+					case Clyde:  to_corral(&game->ghosts[3]);  break;
+				}
+				face->collided = 0;
+			}
 
 			break;
 		case Win:
@@ -160,6 +181,10 @@ void g_render(Game_t *game)
 				{
 					switch(game->ghosts[i].state)
 					{
+					case Frightened:
+						{
+							draw_scared_ghost(&game->ghosts[i]);
+						} break;
 
 					default: draw_ghost(&game->ghosts[i]);
 					}
@@ -345,7 +370,7 @@ static void process_player(Game_t *game)
 	resolve_telesquare(&pacman->body);
 }
 
-static void process_pills(Game_t *game)
+static void process_pills(Game_t *game, unsigned dtlarge)
 {
 	CollectPills_t *collect;
 	int i;
@@ -368,6 +393,12 @@ static void process_pills(Game_t *game)
 			//eating a small pill makes pacman not move for 1 frame
 			//eating a large pill makes pacman not move for 3 frames
 			game->pacman.missedFrames = pill_nopframes(p);
+
+			if (p->type == Large)
+			{
+				game->frighttime = dtlarge;
+				game->isfright = 1;
+			}
 
 			return;
 		}
@@ -400,6 +431,8 @@ static void process_ghosts(Game_t *game)
 			int moved = move_ghost(&game->ghosts[i].body);
 			switch (game->ghosts[i].type)
 			{
+				if (game->isfright) break;
+				case Blinky: break;
 				case Pinky: { game->ghosts[i].state = Scatter; flPinky = 1;} break;
 				case Inky:	{ game->ghosts[i].body.next = left; } break;
 				case Clyde:	{ game->ghosts[i].body.next = right;  } break;				
@@ -408,7 +441,7 @@ static void process_ghosts(Game_t *game)
 			{
 				game->ghosts[i].body.next = up;
 				move_ghost(&game->ghosts[i].body);
-				if (game->ghosts[i].body.y == 11 && !flPinky) game->ghosts[i].state = Chase;
+				if (game->ghosts[i].body.y == 11 && !flPinky && !game->isfright) game->ghosts[i].state = Chase;
 			}
 			
 			continue;
@@ -492,16 +525,22 @@ static void process_fruit(Game_t *game)
 	}
 }
 
-static int check_pacghost_facing(Game_t *game)
+static Face_t *check_pacghost_facing(Game_t *game)
 {
 	int i;
+	Face_t *face =  &game->face;
 	for (i = 0; i < 4; i++)
 	{
 		Ghost_t *g = &game->ghosts[i];
-		if (faces(&game->pacman.body, &g->body)) return 1;
+		face->type = g->type;
+		if (faces(&game->pacman.body, &g->body))
+		{			
+			face->collided = 1;
+			return face;
+		}
 	}
-
-	return 0;
+	face->collided = 0;
+	return face;
 }
 
 
@@ -517,7 +556,6 @@ static int resolve_telesquare(Body_t *body)
 
 static void time_mode(Ghost_t *g, TimeMode_t tmode, unsigned dtlvl, int leave, int mult, int lvl)
 {
-	printf("dtlvl: %d \n", dtlvl);
 	switch (tmode)
 	{
 	case Mode1:
@@ -569,10 +607,16 @@ static void change_speed(Game_t *game)
 	for (i=0; i<4;i++)
 	{
 		if (game->ghosts[i].state == In) game->ghosts[i].body.velocity = ghost_speed_tunnel(game->level);
-		else if (game->ghosts[i].state == Frightened) game->ghosts[i].body.velocity = ghost_speed_fear(game->level);
-		else game->ghosts[i].body.velocity = ghost_speed_normal(game->level);
-		printf("Ghost speed: %d", game->ghosts[i].body.velocity);
-		//printf("level %d \n", game->level);
+		else if (game->ghosts[i].state == Frightened) 
+			{
+				game->pacman.body.velocity = pacman_speed_fear(game->level);
+				game->ghosts[i].body.velocity = ghost_speed_fear(game->level);
+			}
+		else 
+			{
+				game->pacman.body.velocity = pacman_speed_normal(game->level);
+				game->ghosts[i].body.velocity = ghost_speed_normal(game->level);
+			}
 	}
 }
 
@@ -600,4 +644,18 @@ static int check_leave(Game_t *game, Ghost_t *g, int InkyCounter, int ClydeCount
 		}
 	}
 	return 0;	
+}
+
+static void to_frightmode(Game_t *game, Ghost_t *g, unsigned dtlarge)
+{
+	int i, leave = 0;
+	leave = check_leave(game, g, game->InkyCounter, game->ClydeCounter);
+	if ((dtlarge - game->frighttime) < MULT_VALUE_LVL1 * 5)
+	{
+		g->state = check_ghosts_type(g, Frightened, leave);
+	}
+	else game->isfright = 0;
+	change_speed(game);
+	
+	printf("Ghost: %d , State: %d \n", g->type, g->state);
 }

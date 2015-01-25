@@ -44,7 +44,8 @@ SDL_Surface *pacmanLifeIcon;
 
 //ghosts have 4 colors * 2 images for main animatino
 SDL_Surface *ghosts[4][4][2];
-
+//2 images for scared ghost
+SDL_Surface *ghostScared;
 //
 //feauters sprites
 //
@@ -268,6 +269,7 @@ void load_ghost_imgs(void)
 			ghosts[col][3][i] = load_img(dirStr);
 		}
 	}
+	ghostScared = load_img("images\\entities\\ghosts\\scared\\scared.png");
 }
 
 void set_ghost_imgs(void)
@@ -281,6 +283,7 @@ void set_ghost_imgs(void)
 			SDL_FreeSurface(ghosts[i][j][1]);
 		}
 	}
+	SDL_FreeSurface(ghostScared);
 }
 
 
@@ -425,4 +428,9 @@ SDL_Surface* get_fruit_img(Fruit_t fruit)
 SDL_Surface* ghost_img(GhostType_t type, Direction_t dir, int frame)
 {
 	return ghosts[type][dir][frame];
+}
+
+SDL_Surface* scared_ghost_img()
+{
+	return ghostScared;
 }

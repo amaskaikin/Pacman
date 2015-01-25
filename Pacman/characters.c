@@ -41,6 +41,14 @@ int pacman_speed_normal(int lvl)
 	return 90;
 }
 
+int pacman_speed_fear(int lvl)
+{
+	if (lvl == 1)  return 90;
+	if (lvl <= 4)  return 95;
+	if (lvl <= 20) return 100;
+	return 100;
+}
+
 void init_ghosts(Ghost_t ghosts[4])
 {
 	int i;
@@ -82,6 +90,26 @@ void reset_ghosts(Ghost_t *ghost, GhostType_t type)
 
 	ghost->transDirect = Left;
 	ghost->nextDirect = Left;
+}
+
+void to_corral(Ghost_t *ghost)
+{
+	int x, y;
+	int ox, oy;
+
+	switch (ghost->type)
+	{
+		case Blinky: { x = 14; y = 14; ox = -8; oy =  0;  break; }
+		case Inky: { x = 14; y = 14; ox = -8; oy =  0;  break; }
+		case Clyde: { x = 14; y = 14; ox = -8; oy =  0;  break; }
+		case Pinky: { x = 14; y = 14; ox = -8; oy =  0;  break; }		
+	}
+	ghost->state = Leaving;
+	ghost->body.x = x;
+	ghost->body.y = y;
+	ghost->body.xOffsetInternal = 0;
+	ghost->body.yOffsetInternal = 0;
+
 }
 
 void go_home(Ghost_t *ghost, GhostType_t type)
