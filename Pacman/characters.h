@@ -87,3 +87,5 @@ void get_pink_logic(Ghost_t *pink, Pacman_t *pacman);
 void get_orange_logic(Ghost_t *orange, Pacman_t *pacman);
 
 int ghost_speed_normal(int lvl);
+int ghost_speed_fear(int lvl);
+int ghost_speed_tunnel(int lvl);

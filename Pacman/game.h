@@ -15,6 +15,14 @@ typedef enum
 	Gameover
 } StateGame_t;
 
+typedef enum
+{
+	Mode1,
+	Mode2,
+	Mode3,
+	Mode4,
+} TimeMode_t;
+
 typedef struct
 {
 	Border_t border;
@@ -22,9 +30,12 @@ typedef struct
 	Ghost_t ghosts[4];
 	CollectPills_t collectPills;
 	StateGame_t stategame;
+	TimeMode_t timemode;
 	unsigned int ticksNewMode;
+	unsigned int lvltime;
 	DispFruit_t dispFruit1, dispFruit2;
 	int level;
+	int InkyCounter, ClydeCounter;
 } Game_t;
 
 //Ticks(game 1 tick - 1/60th of a second)

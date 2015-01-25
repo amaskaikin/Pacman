@@ -61,14 +61,15 @@ void reset_ghosts(Ghost_t *ghost, GhostType_t type)
 	int ox, oy;
 	Direction_t dir;
 	Direction_t next;
+	GhostState_t state;
 
 	switch (type)
 	{
 		//testing
-		case Blinky: { x = 14; y = 11; ox = -8; oy =  0; dir = Left; next = Left; break; }
-		case Inky: { x = 16; y = 11; ox = -8; oy =  0; dir = Left;   next = Left; break; }
-		case Clyde: { x = 12; y = 11; ox = -8; oy =  0; dir = Left;   next = Left; break; }
-		case Pinky: { x = 14; y = 11; ox = -8; oy =  0; dir = Left; next = Left; break; }
+		case Blinky: { x = 14; y = 11; ox = -8; oy =  0; state = Scatter; dir = Left; next = Left; break; }
+		case Inky: { x = 16; y = 14; ox = -8; oy =  0; state = In; dir = Up;   next = Down; break; }
+		case Clyde: { x = 12; y = 14; ox = -8; oy =  0; state = In; dir = Up;   next = Down; break; }
+		case Pinky: { x = 14; y = 14; ox = -8; oy =  0; state = Leaving; dir = Down; next = Up; break; }
 	}
 
 	ghost->body.x = x;
@@ -246,10 +247,25 @@ void get_pink_logic(Ghost_t *pinkGhost, Pacman_t *pacman)
 	pinkGhost->targetY = pacman->body.y + targetOffsetY;
 }
 
+
 int ghost_speed_normal(int lvl)
 {
 	if (lvl == 1)  return 75;
 	if (lvl <= 4)  return 85;
 	if (lvl <= 20) return 95;
 	return 95;
+}
+int ghost_speed_fear(int lvl)
+{
+	if (lvl == 1)  return 50;
+	if (lvl <= 4)  return 55;
+	if (lvl <= 20) return 60;
+	return 100; //ghosts don't get into frightened mode past this
+}
+int ghost_speed_tunnel(int lvl)
+{
+	if (lvl == 1)  return 40;
+	if (lvl <= 4)  return 45;
+	if (lvl <= 20) return 50;
+	return 50;
 }

@@ -8,19 +8,68 @@
 #include "anim.h"
 #include "physcs.h"
 
+#define MULT_VALUE_LVL1 1000
+#define MULT_VALUE_LVL5 715
+
 static void process_player(Game_t *game);
 static void process_pills(Game_t *game);
 static void process_ghosts(Game_t *game);
 static void process_fruit(Game_t *game);
 
+static void gameplay(Game_t *game, unsigned dtlvl);
+static void change_speed(Game_t *game);
 static int check_pacghost_facing(Game_t *game);    
+static GhostState_t check_ghosts_type(Ghost_t *g, GhostState_t state, int leave);
 static void enter_state(Game_t *game, StateGame_t state);
 static int resolve_telesquare(Body_t *body);  
+static void time_mode(Ghost_t *g, TimeMode_t tmode, unsigned dtlvl, int leave, int mult, int lvl);
+
+static void gameplay(Game_t *game, unsigned dtlvl)
+{
+	int i, leave = 0;
+	//printf("lvl: %d", game->level);
+	for (i = 0; i < 4; i++)
+	{
+		Ghost_t *g = &game->ghosts[i];
+	
+		if (game->level==1)
+		{	
+			leave = check_leave(game, g, game->InkyCounter, game->ClydeCounter);
+			
+			if (dtlvl > 0 && dtlvl <30*MULT_VALUE_LVL1) time_mode(g, Mode1, dtlvl, leave, MULT_VALUE_LVL1, game->level);
+			if (dtlvl > 30*MULT_VALUE_LVL1 && dtlvl <57*MULT_VALUE_LVL1) time_mode(g, Mode2, dtlvl, leave, MULT_VALUE_LVL1, game->level);				
+			if (dtlvl > 57*MULT_VALUE_LVL1 && dtlvl <82*MULT_VALUE_LVL1) time_mode(g, Mode3, dtlvl, leave, MULT_VALUE_LVL1, game->level);
+			if (dtlvl > 82*MULT_VALUE_LVL1)	time_mode(g, Mode4, dtlvl, leave, MULT_VALUE_LVL1, game->level);
+			change_speed(game);
+			//printf("State: %s", g->state);
+		}	
+
+		if ((game->level > 1) && (game->level < 5))
+		{
+			leave = check_leave(game, g, game->InkyCounter, game->ClydeCounter);
+
+			if (dtlvl > 0 && dtlvl <30*MULT_VALUE_LVL1) time_mode(g, Mode1, dtlvl, leave, MULT_VALUE_LVL1, game->level);
+			if (dtlvl > 30*MULT_VALUE_LVL1 && dtlvl <57*MULT_VALUE_LVL1) time_mode(g, Mode2, dtlvl, leave, MULT_VALUE_LVL1, game->level);
+			if (dtlvl > 57*MULT_VALUE_LVL1 && dtlvl <1033*MULT_VALUE_LVL1) time_mode(g, Mode3, dtlvl, leave, MULT_VALUE_LVL1, game->level);
+			if (dtlvl > 1035*MULT_VALUE_LVL1+1)	time_mode(g, Mode4, dtlvl, leave, MULT_VALUE_LVL1, game->level);
+			change_speed(game);
+		}
+		if (game->level >= 5)
+		{
+			if (dtlvl > 0 && dtlvl <30*MULT_VALUE_LVL5) time_mode(g, Mode1, dtlvl, leave, MULT_VALUE_LVL1, game->level);
+			if (dtlvl > 30*MULT_VALUE_LVL5 && dtlvl <57*MULT_VALUE_LVL5) time_mode(g, Mode2, dtlvl, leave, MULT_VALUE_LVL1, game->level);
+			if (dtlvl > 57*MULT_VALUE_LVL5 && dtlvl <1033*MULT_VALUE_LVL5) time_mode(g, Mode3, dtlvl, leave, MULT_VALUE_LVL1, game->level);
+			if (dtlvl > 1035*MULT_VALUE_LVL5+1)	time_mode(g, Mode4, dtlvl, leave, MULT_VALUE_LVL1, game->level);
+			change_speed(game);
+		}
+	}
+}
 
 void g_tick(Game_t *game)
 {
 	int i, lives, allPillsEaten, collidedWithGhost;
 	unsigned dt = ticks_game() - game->ticksNewMode;
+	unsigned dtlvl = ticks_game() - game->lvltime;
 
 	switch (game->stategame)
 	{
@@ -52,6 +101,8 @@ void g_tick(Game_t *game)
 			break;
 		case GamePlay:
 			//printf("ticks:%d", dt);
+			gameplay(game, dtlvl);
+
 			if (allPillsEaten) enter_state(game, Win);
 			else if (collidedWithGhost) enter_state(game, Death);
 
@@ -155,6 +206,7 @@ void init_game(Game_t *game)
 	init_pills(&game->collectPills);
 	game->level = 1;
 	init_ghosts(game->ghosts);
+	enter_state(game, GameBegin);
 }
 
 void new_level(Game_t *game)
@@ -187,8 +239,7 @@ static void enter_state(Game_t *game, StateGame_t state)
 	//process leaving a state
 	switch (game->stategame)
 	{
-		case GameBegin:
-			game->pacman.lives--;			
+		case GameBegin:	
 			break;
 		case Win:
 			game->level++;
@@ -426,4 +477,89 @@ static int resolve_telesquare(Body_t *body)
 	if (body->x == 28) { body->x =  0; return 1; }
 
 	return 0;
+}
+
+static void time_mode(Ghost_t *g, TimeMode_t tmode, unsigned dtlvl, int leave, int mult, int lvl)
+{
+	printf("dtlvl: %d \n", dtlvl);
+	switch (tmode)
+	{
+	case Mode1:
+		{
+			if (dtlvl > 0 && dtlvl <10*mult)	    g->state = check_ghosts_type(g, Scatter, leave);
+			if (dtlvl > 10*mult && dtlvl <30*mult)	g->state = check_ghosts_type(g, Chase, leave);
+		} break;
+	case Mode2:
+		{
+			if (dtlvl > 30*mult && dtlvl <37*mult)	g->state = check_ghosts_type(g, Scatter, leave);
+			if (dtlvl > 37*mult && dtlvl <57*mult)  g->state = check_ghosts_type(g, Chase, leave);
+		} break;
+	case Mode3:
+		{
+			if (dtlvl > 57*mult && dtlvl <62*mult)  g->state = check_ghosts_type(g, Scatter, leave);
+			if (dtlvl > 62*mult && dtlvl <82*mult && (lvl == 1))  g->state = check_ghosts_type(g, Chase, leave);
+			else if (dtlvl > 62*mult && dtlvl <1035*mult) g->state = check_ghosts_type(g, Chase, leave);
+		} break;
+	case Mode4:
+		{
+			if (lvl ==1)
+			{
+				if (dtlvl > 82*mult && dtlvl <87*mult)	g->state = check_ghosts_type(g, Scatter, leave);
+				if (dtlvl > 87*mult) g->state = check_ghosts_type(g, Chase, leave);
+			}
+			else 
+			{
+				if (dtlvl > 1035*mult && dtlvl <1035*mult+1)	g->state = check_ghosts_type(g, Scatter, leave);
+				if (dtlvl > 1035*mult+1) g->state = check_ghosts_type(g, Chase, leave);
+			}
+		} break;
+	}
+}
+
+static GhostState_t check_ghosts_type(Ghost_t *g, GhostState_t state, int leave)
+{
+	GhostState_t gstate = state;
+	if (g->type != Blinky && g->type !=Pinky) 
+			if (leave) 
+				{
+					gstate = state; 
+				} else gstate = g->state;	
+	return gstate;
+}
+
+static void change_speed(Game_t *game)
+{
+	int i;
+	for (i=0; i<4;i++)
+	{
+		if (game->ghosts[i].state == In) game->ghosts[i].body.velocity = ghost_speed_tunnel(game->level);
+		else if (game->ghosts[i].state == Frightened) game->ghosts[i].body.velocity = ghost_speed_fear(game->level);
+		else game->ghosts[i].body.velocity = ghost_speed_normal(game->level);
+		//printf("Ghost speed: %d", game->ghosts[i].body.velocity);
+		//printf("level %d \n", game->level);
+	}
+}
+
+static int check_leave(Game_t *game, Ghost_t *g, int InkyCounter, int ClydeCounter)
+{
+	switch (g->type)
+	{
+	case Inky:
+		{
+			if (((game->collectPills.totalPills - game->collectPills.existPills) >= 30) && !InkyCounter)
+			{
+				g->state = Leaving; game->InkyCounter = 1 ; return 1;
+			}
+			break;
+		}
+	case Clyde: 
+		{
+			if (((game->collectPills.totalPills - game->collectPills.existPills) >= 90) && !ClydeCounter) 
+			{
+				g->state = Leaving; game->ClydeCounter = 1; return 1;
+			}
+			break;
+		}
+	}
+	return 0;	
 }
