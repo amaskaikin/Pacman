@@ -70,6 +70,7 @@ typedef struct
 	Body_t body;
 	int targetX;
 	int targetY;
+	int eaten;
 	Direction_t transDirect; //direction ghost should face for middle of current square to middle of next square
 	Direction_t nextDirect;  ////direction ghost should face when reaching the center of the next square
 	GhostType_t type;

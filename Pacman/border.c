@@ -19,6 +19,15 @@ int isteleport_sq(int x, int y)
 	else return 0;
 }
 
+int isghostnoup_squ(int x, int y)
+{
+//squares are:
+	// (12, 22) (14, 22)
+	// (12, 10) (14, 10)
+	return (x == 12 && y == 22) || (x == 15 && y == 22) ||
+	       (x == 12 && y == 10) || (x == 15 && y == 10);
+}
+
 void load_border(Border_t *border, CollectPills_t *collectPills, const char* file)
 {
 	FILE *f = fopen(file, "r");

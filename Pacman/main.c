@@ -24,6 +24,9 @@ static void main_loop(void);
 //Defers to appropriate tick, based on current state.
 static void internal_tick(void);
 
+//Defers to appropriate render, based on current state.
+static void internal_render(void);
+
 //Frees all resources.
 static void clean_up(void);
 
@@ -51,10 +54,8 @@ static void main_loop(void)
 	{
 		process_events();
 		internal_tick();
-		clear_scr(0, 0, 0, 0);
-		g_render(&pacmanGame);
+		internal_render();
 		
-		flip_scr();
 		sleep_fps();
 	}
 }
@@ -77,6 +78,21 @@ static void internal_tick(void)
 				state = Start;
 			}
 	}
+}
+
+static void internal_render(void)
+{
+	clear_scr(0, 0, 0, 0);
+	switch (state)
+	{
+		case Start:
+			break;
+		case Game:
+			g_render(&pacmanGame);
+			break;
+	}
+
+	flip_scr();
 }
 
 static void startgame_init(void)

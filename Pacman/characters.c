@@ -88,8 +88,11 @@ void reset_ghosts(Ghost_t *ghost, GhostType_t type)
 	ghost->body.xOffsetInternal = 0;
 	ghost->body.yOffsetInternal = 0;
 
+	ghost->state = state;
 	ghost->transDirect = Left;
 	ghost->nextDirect = Left;
+
+	ghost->eaten = 0;
 }
 
 void to_corral(Ghost_t *ghost)
@@ -171,6 +174,9 @@ Direction_t next_direction(Ghost_t *ghost, Border_t *border)
 
 		//make sure the square is a valid walkable square
 		if (!(isvalid_sq(border, testX, testY) || isteleport_sq(testX, testY))) continue;
+
+		//a further condition is that ghosts cannot enter certain squares moving upwards
+		if (targets[i].dir == Up && isghostnoup_squ(testX, testY)) continue;
 
 		dx = testX - ghost->targetX;
 		dy = testY - ghost->targetY;
